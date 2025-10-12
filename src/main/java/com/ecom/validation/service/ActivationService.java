@@ -2,6 +2,7 @@ package com.ecom.validation.service;
 
 import com.ecom.validation.clients.SecurityRestClient;
 import com.ecom.validation.clients.UserRestClient;
+import com.ecom.validation.dto.ActivPasswordDto;
 import com.ecom.validation.dto.LoginActivationDto;
 import com.ecom.validation.entity.Validation;
 import com.ecom.validation.repository.ValidationRepository;
@@ -46,7 +47,6 @@ public class ActivationService {
         //on envoi la requete au microservice
         assert controlValid != null;
 
-
         if(controlValid.getType().contains("registration")){
             ResponseEntity<Void> resp = this.userRestUser.activationUsers("Bearer "+this.tokenTechnicService.getTechnicalToken(),new LoginActivationDto(validation.getUserId(), null, validation.getActive()));
             if (resp.getStatusCode().is2xxSuccessful()) {
@@ -56,9 +56,17 @@ public class ActivationService {
 
         if(controlValid.getType().contains("deviceId")){
             ResponseEntity<Void> resp = this.securityRestClient.activationLogin("Bearer "+this.tokenTechnicService.getTechnicalToken(),new LoginActivationDto(validation.getUserId(), validation.getDeviceId(), validation.getActive()));
-
             if (resp.getStatusCode().is2xxSuccessful()) {
                 return ResponseEntity.ok("Votre appareil est validé !");
+            } else {
+                throw new UserNotFoundException("Service indisponible");
+            }
+        }
+
+        if(controlValid.getType().contains("editPassword")){
+            ResponseEntity<Void> resp = this.userRestUser.activationPassword("Bearer "+this.tokenTechnicService.getTechnicalToken(),new ActivPasswordDto(validation.getUserId(), password));
+            if (resp.getStatusCode().is2xxSuccessful()) {
+                return ResponseEntity.ok("Votre mot de passe a été modifié avec succès !");
             } else {
                 throw new UserNotFoundException("Service indisponible");
             }
@@ -67,7 +75,6 @@ public class ActivationService {
         else {
             throw new UserNotFoundException("Erreur, veuillez réessayer");
         }
-
     }
 
     //lire le code de validation
