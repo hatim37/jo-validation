@@ -26,15 +26,15 @@ public class NotificationService {
 
         if (validationDto.getType().equals("registration")) {
             subject = "Votre code d'activation";
-            texte = String.format("Bonjour "+username+","+"\n\nVotre code d'activation est "+code+".\n\nA bientôt.");
+            texte = String.format("Bonjour "+username+","+"\n\nVotre code d'activation est "+code+"\n\nA bientôt.");
         }
         if (validationDto.getType().equals("editPassword")) {
             subject ="Réinitialiser votre mot de passe";
-            texte = String.format("Bonjour "+username+","+"\n\nVotre code de réinitialisation est "+code+".\n\nA bientôt.");
+            texte = String.format("Bonjour "+username+","+"\n\nVotre code de réinitialisation est "+code+"\n\nA bientôt.");
         }
         if (validationDto.getType().equals("deviceId")) {
             subject ="Votre code de connexion";
-            texte = String.format("Bonjour "+username+","+"\n\nVotre code de connexion est "+code+".\n\nA bientôt.");
+            texte = String.format("Bonjour "+username+","+"\n\nVotre code de connexion est "+code+"\n\nA bientôt.");
         }
         //on affiche le code en console si version profil local
         log.info("VOTRE MAIL CONTIENT [{}] -> {}", subject, texte);
